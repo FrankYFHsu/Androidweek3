@@ -1,0 +1,1 @@
+include ':app', ':xmlexample', ':jsonexample', ':socketexample'
