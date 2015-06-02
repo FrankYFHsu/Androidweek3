@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AQXListFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -40,9 +40,9 @@ public class MainActivity extends ActionBarActivity {
             if (savedInstanceState != null) {
                 return;
             }
-
+            Log.d(TAG,"in single mode");
             // Create a new Fragment to be placed in the activity layout
-            DetailOfSiteFragment firstFragment = new DetailOfSiteFragment();
+            AQXListFragment firstFragment = new AQXListFragment();
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -62,36 +62,6 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void onArticleSelected(int position) {
-        // The user selected the Recipient of an article from the ArticleFragment
-        // Do something here to display that article
-
-        DetailOfSiteFragment articleFrag = (DetailOfSiteFragment)
-                getSupportFragmentManager().findFragmentById(R.id.article_fragment);
-
-        if (articleFrag != null) {
-            // If article frag is available, we're in two-pane layout…
-            // Call a method in the ArticleFragment to update its content
-            articleFrag.updateArticleView(position);
-        } else {
-            // Otherwise, we're in the one-pane layout and must swap frags…
-            // Create fragment and give it an argument for the selected article
-            DetailOfSiteFragment newFragment = new DetailOfSiteFragment();
-            Bundle args = new Bundle();
-            args.putInt(DetailOfSiteFragment.ARG_POSITION, position);
-            newFragment.setArguments(args);
-
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-
-            // Commit the transaction
-            transaction.commit();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,4 +86,33 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onFragmentInteraction(int position, AQXData data) {
+        DetailOfSiteFragment articleFrag = (DetailOfSiteFragment)
+                getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+
+        if (articleFrag != null) {
+            // If article frag is available, we're in two-pane layout…
+            // Call a method in the ArticleFragment to update its content
+            articleFrag.updateArticleView(position,data);
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags…
+            // Create fragment and give it an argument for the selected article
+            DetailOfSiteFragment newFragment = new DetailOfSiteFragment();
+            Bundle args = new Bundle();
+            args.putInt(DetailOfSiteFragment.ARG_POSITION, position);
+            args.putString(DetailOfSiteFragment.ARG_JSON,new Gson().toJson(data));
+            newFragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+    }
 }

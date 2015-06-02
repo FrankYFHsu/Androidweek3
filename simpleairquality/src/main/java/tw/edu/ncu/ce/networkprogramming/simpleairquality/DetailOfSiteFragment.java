@@ -5,7 +5,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.List;
 
 /**
  * Created by mpclab on 2015/6/2.
@@ -13,7 +19,13 @@ import android.widget.TextView;
 public class DetailOfSiteFragment extends Fragment {
 
     final static String ARG_POSITION = "position";
+    final static String ARG_JSON = "json";
     int mCurrentPosition = -1;
+    private ListView detailsView;
+    private TextView sitetextView;
+    private TextView statustextView;
+    private TextView pm25textView;
+    private AQXData mData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,10 +35,11 @@ public class DetailOfSiteFragment extends Fragment {
         // This is primarily necessary when in the two-pane layout.
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
+            mData = new Gson().fromJson(savedInstanceState.getString(ARG_JSON), AQXData.class);
         }
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.article_view, container, false);
+        return inflater.inflate(R.layout.detail_view, container, false);
 
     }
 
@@ -42,18 +55,41 @@ public class DetailOfSiteFragment extends Fragment {
 
         if (args != null) {
             // Set article based on argument passed in
-            updateArticleView(args.getInt(ARG_POSITION));
+            AQXData d = new Gson().fromJson(args.getString(ARG_JSON),AQXData.class);
+            updateArticleView(args.getInt(ARG_POSITION),d);
         } else if (mCurrentPosition != -1) {
             // Set article based on saved instance state defined during onCreateView
-            updateArticleView(mCurrentPosition);
+            updateArticleView(mCurrentPosition, mData);
         }
     }
 
-    public void updateArticleView(int position) {
-        //TextView article = (TextView) getActivity().findViewById(R.id.article);
-        //article.setText(ArticleData.HistoryID[position]);
+    public void updateArticleView(int position, AQXData data) {
+        this.mData = data;
         //TODO
+
         mCurrentPosition = position;
+
+        detailsView = (ListView)getView().findViewById(R.id.details);
+        sitetextView = (TextView)getView().findViewById(R.id.sitetextView);
+        statustextView = (TextView)getView().findViewById(R.id.statustextView);
+        pm25textView = (TextView)getView().findViewById(R.id.pm25textView);
+
+        sitetextView.setText(data.getSiteName());
+        statustextView.setText("空氣品質 : "+data.getStatus());
+        pm25textView.setText("PM2.5 : "+data.getPM2_5());
+
+
+        List<String> result = data.getDetails();
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, result);
+
+
+        detailsView.setAdapter(adapter);
+
+
+
     }
 
     @Override
@@ -62,6 +98,7 @@ public class DetailOfSiteFragment extends Fragment {
 
         // Save the current article selection in case we need to recreate the fragment
         outState.putInt(ARG_POSITION, mCurrentPosition);
+        outState.putString(ARG_JSON, new Gson().toJson(mData));
     }
 
 

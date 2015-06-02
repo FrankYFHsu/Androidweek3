@@ -2,6 +2,9 @@ package tw.edu.ncu.ce.networkprogramming.simpleairquality;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by mpclab on 2015/5/27.
  */
@@ -10,8 +13,6 @@ public class AQXData {
     private String SiteName;
     private String Status;
     private String SO2;
-
-
     private String CO;
     private String O3;
     private String PM10;
@@ -130,5 +131,20 @@ public class AQXData {
                 + PM2_5;
 
 
+    }
+
+    public List<String> getDetails(){
+        List<String> details = new ArrayList<>();
+
+        details.add("空氣污染指標:"+PSI);
+        details.add("二氧化硫濃度:"+SO2);
+        details.add("一氧化碳濃度:"+CO);
+        details.add("臭氧濃度:"+O3);
+        details.add("懸浮微粒濃度(PM10):"+PM10);
+        details.add("細懸浮微粒濃度(PM2.5):"+PM2_5);
+        details.add("二氧化氮濃度:"+NO2);
+        details.add("發布時間:"+PublishTime);
+
+        return details;
     }
 }

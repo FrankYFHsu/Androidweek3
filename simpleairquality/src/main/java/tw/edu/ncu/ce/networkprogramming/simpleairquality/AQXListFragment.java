@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,12 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class AQXListFragment extends Fragment {
     private static final String TAG = AQXListFragment.class.getName();
     private OnFragmentInteractionListener mListener;
     private ListView mListView;
-    //private List<AQXData> mResult;
+    private final String jsonAPI =
+            "http://opendata.epa.gov.tw/ws/Data/AQX/?$format=json";
+    private AQXDataAdapter mAdapter;
 
     public AQXListFragment() {
         // Required empty public constructor
@@ -37,14 +40,13 @@ public class AQXListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
 
-
-
-        //TODO mListView need to put otherplace
-        mListView = (ListView)getActivity().findViewById(R.id.listView);
-
-
-
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG,"do HttpGetTaskWithGson");
+        new HttpGetTaskWithGson().execute(jsonAPI);
 
     }
 
@@ -57,9 +59,9 @@ public class AQXListFragment extends Fragment {
     }
 
 
-    public void onButtonPressed(Uri uri) {
+    public void onDataItemClick(int position, AQXData data) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(position,data);
         }
     }
 
@@ -109,12 +111,13 @@ public class AQXListFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(int position, AQXData data);
     }
 
     private class HttpGetTaskWithGson extends AsyncTask<String, Integer, List<AQXData>> {
         @Override
         protected List<AQXData> doInBackground(String... urls) {
+            Log.d(TAG, "doInBackground");
             List<AQXData> result = new ArrayList<AQXData>();
             String apiurl = urls[0];
             try {
@@ -164,14 +167,27 @@ public class AQXListFragment extends Fragment {
         protected void onPostExecute(List<AQXData> result) {
 
 
-
             if (result.size() == 0) {
                 Toast.makeText(getActivity(), "Service Unavailable", Toast.LENGTH_LONG).show();
 
             }
 
-            AQXDataAdapter adapter = new AQXDataAdapter(getActivity(), result);
-            mListView.setAdapter(adapter);
+            mListView = (ListView) getView().findViewById(R.id.listView);
+            mAdapter = new AQXDataAdapter(getActivity(), result);
+            mListView.setAdapter(mAdapter);
+
+
+            mListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    onDataItemClick(position,mAdapter.getItem(position));
+                    mListView.setItemChecked(position, true);
+
+                }
+
+            });
 
 
         }
