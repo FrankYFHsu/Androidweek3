@@ -12,19 +12,31 @@
         android:layout_height="wrap_content"
         android:text="get JSON Response"
         android:onClick="downloadInformation"
-        android:layout_margin="8dp"/>
+        android:layout_margin="4dp"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="get JSON Response (with GSON)"
-        android:onClick="downloadInformation2"
-        android:layout_margin="8dp"/>
+        android:onClick="downloadInformationWithGson"
+        android:layout_margin="4dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="get JSON Response (SimpleAdapter)"
+        android:onClick="downloadInformationWithSimpleAdapter"
+        android:layout_margin="4dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="get JSON Response (Customized)"
+        android:onClick="downloadInformationWithCustomizedListView"
+        android:layout_margin="4dp"/>
     <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:id="@+id/progressBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_margin="8dp"/>
+        android:layout_margin="4dp"/>
 
     <ListView
         android:layout_width="match_parent"

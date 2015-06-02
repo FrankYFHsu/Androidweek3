@@ -1,5 +1,4 @@
-package tw.edu.ncu.ce.networkprogramming.jsonexample
-        ;
+package tw.edu.ncu.ce.networkprogramming.jsonexample;
 
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -29,12 +28,12 @@ import java.util.List;
 
 
 public class HttpJSONActivity extends ActionBarActivity {
-
+    private final String TAG = HttpJSONActivity.class.getName();
     private final String jsonAPI = "http://opendata.epa.gov.tw/ws/Data/AQX/?$format=json";
     private ProgressBar mProgressBar;
     private final int SIMPLEADPATER_EXAMPLE = 1;
     private final int CUSTOMIZED_EXAMPLE = 2;
-    private int mExample = CUSTOMIZED_EXAMPLE;
+    private int mExample = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +71,16 @@ public class HttpJSONActivity extends ActionBarActivity {
         new HttpGetTask().execute(jsonAPI);
     }
 
-    public void downloadInformation2(View view) {
-
+    public void downloadInformationWithGson(View view) {
+        mExample = 0;
+        new HttpGetTaskWithGson().execute(jsonAPI);
+    }
+    public void downloadInformationWithSimpleAdapter(View view) {
+        mExample = SIMPLEADPATER_EXAMPLE;
+        new HttpGetTaskWithGson().execute(jsonAPI);
+    }
+    public void downloadInformationWithCustomizedListView(View view) {
+        mExample = CUSTOMIZED_EXAMPLE;
         new HttpGetTaskWithGson().execute(jsonAPI);
     }
 
@@ -102,7 +109,7 @@ public class HttpJSONActivity extends ActionBarActivity {
 
 
                 if (conn.getResponseCode() == 200) {
-                    Log.d("TAG", "connect successful");
+                    Log.d(TAG, "connect successful");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                     StringBuilder sb = new StringBuilder();
                     String line = null;
@@ -135,8 +142,8 @@ public class HttpJSONActivity extends ActionBarActivity {
 
 
             } catch (Exception e) {
-                Log.e(this.getClass().getName(), "Exception for url:" + apiurl);
-                Log.e(this.getClass().getName(), "Exception :" + e.getMessage());
+                Log.e(TAG, "Exception for url:" + apiurl);
+                Log.e(TAG, "Exception :" + e.getMessage());
             }
 
 
@@ -156,7 +163,6 @@ public class HttpJSONActivity extends ActionBarActivity {
                 Toast.makeText(HttpJSONActivity.this, "Service Unavailable", Toast.LENGTH_LONG).show();
 
             }
-
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(HttpJSONActivity.this,
                     android.R.layout.simple_list_item_1, result);
@@ -182,7 +188,7 @@ public class HttpJSONActivity extends ActionBarActivity {
                 conn.setConnectTimeout(5000);
 
                 if (conn.getResponseCode() == 200) {
-                    Log.d("TAG", "connect successful");
+                    Log.d(TAG, "connect successful");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                     StringBuilder sb = new StringBuilder();
                     String line = null;
@@ -204,7 +210,7 @@ public class HttpJSONActivity extends ActionBarActivity {
 
 
                 }else{
-                    Log.d("TAG", "Using test data");
+                    Log.d(TAG, "Using test data");
                     String test =MockAQXJson.mock1;
                     Gson gson = new Gson();
                     AQXData[] data = gson.fromJson(test, AQXData[].class);
@@ -220,8 +226,8 @@ public class HttpJSONActivity extends ActionBarActivity {
 
 
             } catch (Exception e) {
-                Log.e(this.getClass().getName(), "Exception for url:" + apiurl);
-                Log.e(this.getClass().getName(), "Exception :" + e.getMessage());
+                Log.e(TAG, "Exception for url:" + apiurl);
+                Log.e(TAG, "Exception :" + e.getMessage());
             }
 
 
