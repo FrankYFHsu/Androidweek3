@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Androidweek3.iml" filepath="$PROJECT_DIR$/Androidweek3.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsonexample/jsonexample.iml" filepath="$PROJECT_DIR$/jsonexample/jsonexample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simpleairquality/simpleairquality.iml" filepath="$PROJECT_DIR$/simpleairquality/simpleairquality.iml" />
       <module fileurl="file://$PROJECT_DIR$/socketexample/socketexample.iml" filepath="$PROJECT_DIR$/socketexample/socketexample.iml" />
       <module fileurl="file://$PROJECT_DIR$/xmlexample/xmlexample.iml" filepath="$PROJECT_DIR$/xmlexample/xmlexample.iml" />
     </modules>

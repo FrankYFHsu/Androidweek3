@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/jsonexample" />
+            <option value="$PROJECT_DIR$/simpleairquality" />
             <option value="$PROJECT_DIR$/socketexample" />
             <option value="$PROJECT_DIR$/xmlexample" />
           </set>

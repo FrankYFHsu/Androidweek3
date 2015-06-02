@@ -1,1 +1,1 @@
-include ':app', ':xmlexample', ':jsonexample', ':socketexample'
+include ':app', ':xmlexample', ':jsonexample', ':socketexample', ':simpleairquality'

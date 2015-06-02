@@ -29,7 +29,8 @@ import java.util.List;
 
 public class HttpJSONActivity extends ActionBarActivity {
     private final String TAG = HttpJSONActivity.class.getName();
-    private final String jsonAPI = "http://opendata.epa.gov.tw/ws/Data/AQX/?$format=json";
+    private final String jsonAPI =
+            "http://opendata.epa.gov.tw/ws/Data/AQX/?$format=json";
     private ProgressBar mProgressBar;
     private final int SIMPLEADPATER_EXAMPLE = 1;
     private final int CUSTOMIZED_EXAMPLE = 2;
