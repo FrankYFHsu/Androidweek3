@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class AQXData {
 
-
     private String SiteName;
     private String Status;
 
@@ -20,9 +19,6 @@ public class AQXData {
         this.PM2_5 = PM25;
     }
 
-
-
-
     public String getStatus() {
         return Status;
     }
@@ -31,7 +27,6 @@ public class AQXData {
         Status = status;
     }
 
-
     public String getPM2_5() {
         return PM2_5;
     }
@@ -39,7 +34,6 @@ public class AQXData {
     public void setPM2_5(String PM2_5) {
         this.PM2_5 = PM2_5;
     }
-
 
     public void setSiteName(String siteName) {
         this.SiteName = siteName;

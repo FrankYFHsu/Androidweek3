@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -30,6 +32,9 @@ public class HttpJSONActivity extends ActionBarActivity {
 
     private final String jsonAPI = "http://opendata.epa.gov.tw/ws/Data/AQX/?$format=json";
     private ProgressBar mProgressBar;
+    private final int SIMPLEADPATER_EXAMPLE = 1;
+    private final int CUSTOMIZED_EXAMPLE = 2;
+    private int mExample = CUSTOMIZED_EXAMPLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +91,6 @@ public class HttpJSONActivity extends ActionBarActivity {
 
         @Override
         protected List<String> doInBackground(String... urls) {
-            Log.d("TAG", "doinbackg");
             List<String> result = new ArrayList<String>();
             String apiurl = urls[0];
             try {
@@ -153,20 +157,22 @@ public class HttpJSONActivity extends ActionBarActivity {
 
             }
 
+
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(HttpJSONActivity.this,
                     android.R.layout.simple_list_item_1, result);
 
             ListView listView = (ListView) findViewById(R.id.listView);
             listView.setAdapter(adapter);
         }
+
+
     }
 
 
-    private class HttpGetTaskWithGson extends HttpGetTask {
+    private class HttpGetTaskWithGson extends  AsyncTask<String, Integer, List<AQXData>> {
         @Override
-        protected List<String> doInBackground(String... urls) {
-            Log.d("TAG", "doinbackg");
-            List<String> result = new ArrayList<String>();
+        protected List<AQXData> doInBackground(String... urls) {
+            List<AQXData> result = new ArrayList<AQXData>();
             String apiurl = urls[0];
             try {
 
@@ -174,7 +180,6 @@ public class HttpJSONActivity extends ActionBarActivity {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-
 
                 if (conn.getResponseCode() == 200) {
                     Log.d("TAG", "connect successful");
@@ -194,9 +199,20 @@ public class HttpJSONActivity extends ActionBarActivity {
 
                     for (int i = 0; i < data.length; i++) {
                         publishProgress((int) (((i + 1) / (float) data.length) * 100));
-                        result.add(data[i].toString());
+                        result.add(data[i]);
                     }
 
+
+                }else{
+                    Log.d("TAG", "Using test data");
+                    String test =MockAQXJson.mock1;
+                    Gson gson = new Gson();
+                    AQXData[] data = gson.fromJson(test, AQXData[].class);
+
+                    for (int i = 0; i < data.length; i++) {
+                        publishProgress((int) (((i + 1) / (float) data.length) * 100));
+                        result.add(data[i]);
+                    }
 
                 }
 
@@ -210,6 +226,47 @@ public class HttpJSONActivity extends ActionBarActivity {
 
 
             return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<AQXData> result) {
+
+            ListView listView = (ListView) findViewById(R.id.listView);
+
+            if (result.size() == 0) {
+                Toast.makeText(HttpJSONActivity.this, "Service Unavailable", Toast.LENGTH_LONG).show();
+
+            }
+
+            if (mExample == SIMPLEADPATER_EXAMPLE) {
+                ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+                for (int i = 0; i < result.size(); i++) {
+                    HashMap<String, String> item = new HashMap<String, String>();
+                    item.put("SiteName", result.get(i).getSiteName());
+                    item.put("Status_PM2.5", "空氣品質："+result.get(i).getStatus()+",PM2.5 : "+result.get(i).getPM2_5());
+                    list.add(item);
+                }
+
+                SimpleAdapter simpleAdapter = new SimpleAdapter(HttpJSONActivity.this, list, android.R.layout.simple_list_item_2, new String[]
+                        {"SiteName", "Status_PM2.5"}, new int[]{android.R.id.text1, android.R.id.text2});
+
+
+                listView.setAdapter(simpleAdapter);
+
+            } else if (mExample == CUSTOMIZED_EXAMPLE) {
+
+                AQXDataAdapter adapter = new AQXDataAdapter(HttpJSONActivity.this, result);
+                listView.setAdapter(adapter);
+
+            } else {
+                ArrayAdapter<AQXData> adapter = new ArrayAdapter<AQXData>(HttpJSONActivity.this,
+                        android.R.layout.simple_list_item_1, result);
+
+                listView.setAdapter(adapter);
+            }
+
+
         }
 
     }
