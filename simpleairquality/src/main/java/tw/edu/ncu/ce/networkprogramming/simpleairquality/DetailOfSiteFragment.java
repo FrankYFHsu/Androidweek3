@@ -9,8 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 /**
@@ -19,12 +17,17 @@ import java.util.List;
 public class DetailOfSiteFragment extends Fragment {
 
     final static String ARG_POSITION = "position";
-    final static String ARG_JSON = "json";
     int mCurrentPosition = -1;
-    private ListView detailsView;
-    private TextView sitetextView;
-    private TextView statustextView;
-    private AQXData mData;
+
+    public static DetailOfSiteFragment newInstance(int position) {
+        DetailOfSiteFragment f = new DetailOfSiteFragment();
+        Bundle args = new Bundle();
+        args.putInt(DetailOfSiteFragment.ARG_POSITION, position);
+        f.setArguments(args);
+        return f;
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +37,7 @@ public class DetailOfSiteFragment extends Fragment {
         // This is primarily necessary when in the two-pane layout.
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
-            mData = new Gson().fromJson(savedInstanceState.getString(ARG_JSON), AQXData.class);
+
         }
 
         // Inflate the layout for this fragment
@@ -46,31 +49,27 @@ public class DetailOfSiteFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        // During startup, check if there are arguments passed to the fragment.
-        // onStart is a good place to do this because the layout has already been
-        // applied to the fragment at this point so we can safely call the method
-        // below that sets the article text.
+
         Bundle args = getArguments();
 
         if (args != null) {
-            // Set article based on argument passed in
-            AQXData d = new Gson().fromJson(args.getString(ARG_JSON),AQXData.class);
-            updateArticleView(args.getInt(ARG_POSITION),d);
+
+            updateDetailsView(args.getInt(ARG_POSITION));
         } else if (mCurrentPosition != -1) {
-            // Set article based on saved instance state defined during onCreateView
-            updateArticleView(mCurrentPosition, mData);
+
+            updateDetailsView(mCurrentPosition);
         }
     }
 
-    public void updateArticleView(int position, AQXData data) {
-        this.mData = data;
-        //TODO
+    public void updateDetailsView(int position) {
+
+        AQXData data = AQXApp.getInstance(getActivity()).getAQXData().get(position);
 
         mCurrentPosition = position;
 
-        detailsView = (ListView)getView().findViewById(R.id.details);
-        sitetextView = (TextView)getView().findViewById(R.id.sitetextView);
-        statustextView = (TextView)getView().findViewById(R.id.statustextView);
+        ListView detailsView = (ListView)getView().findViewById(R.id.details);
+        TextView sitetextView = (TextView)getView().findViewById(R.id.sitetextView);
+        TextView statustextView = (TextView)getView().findViewById(R.id.statustextView);
 
         sitetextView.setText(data.getSiteName());
         statustextView.setText(data.getStatus());
@@ -94,9 +93,9 @@ public class DetailOfSiteFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Save the current article selection in case we need to recreate the fragment
+
         outState.putInt(ARG_POSITION, mCurrentPosition);
-        outState.putString(ARG_JSON, new Gson().toJson(mData));
+
     }
 
 

@@ -13,9 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mpclab on 2015/6/3.
- */
+
 public class AQXApp {
 
     private List<AQXData> mAqxData;
@@ -25,7 +23,6 @@ public class AQXApp {
 
     private static AQXApp airQualityAppInstance;
     private Context mAppContext;
-
     private Gson gson;
 
     private AQXApp(Context appContext) {
@@ -55,7 +52,7 @@ public class AQXApp {
         mAqxData = newAQXData;
     }
 
-    public void requestNewAQXData(AQXResponseCallback callback){
+    public void asyncRequestNewAQXData(AQXResponseCallback callback){
 
         new GetAQXTask(callback).execute(jsonAPI);
 
@@ -102,11 +99,10 @@ public class AQXApp {
                     String jsonString = sb.toString();
 
 
-                    Gson gson = new Gson();
+
                     AQXData[] data = gson.fromJson(jsonString, AQXData[].class);
 
                     for (int i = 0; i < data.length; i++) {
-                        publishProgress((int) (((i + 1) / (float) data.length) * 100));
                         result.add(data[i]);
                     }
 
@@ -137,7 +133,6 @@ public class AQXApp {
                 callback.onFailure(responseMessage);
 
             }
-
 
 
         }

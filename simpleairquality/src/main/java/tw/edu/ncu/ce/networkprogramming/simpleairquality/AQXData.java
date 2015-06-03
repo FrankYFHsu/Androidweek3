@@ -5,9 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mpclab on 2015/5/27.
- */
+
 public class AQXData {
 
     private String SiteName;
@@ -19,18 +17,11 @@ public class AQXData {
     private String NO2;
     private String FPMI;
     private String PublishTime;
-
-
     private String PSI;
 
     @SerializedName("PM2.5")
     private String PM2_5;
 
-    public AQXData(String SiteName, String Status, String PM25) {
-        this.SiteName = SiteName;
-        this.Status = Status;
-        this.PM2_5 = PM25;
-    }
 
     public String getStatus() {
         return Status;
@@ -136,7 +127,7 @@ public class AQXData {
     public List<String> getDetails(){
         List<String> details = new ArrayList<>();
 
-        details.add("空氣污染指標:"+PSI);
+        details.add("空氣污染指標(PSI):"+PSI);
         details.add("二氧化硫濃度:"+SO2);
         details.add("一氧化碳濃度:"+CO);
         details.add("臭氧濃度:"+O3);
