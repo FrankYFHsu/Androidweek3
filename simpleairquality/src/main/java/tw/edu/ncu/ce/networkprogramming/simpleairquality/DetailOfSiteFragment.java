@@ -24,7 +24,6 @@ public class DetailOfSiteFragment extends Fragment {
     private ListView detailsView;
     private TextView sitetextView;
     private TextView statustextView;
-    private TextView pm25textView;
     private AQXData mData;
 
     @Override
@@ -72,11 +71,10 @@ public class DetailOfSiteFragment extends Fragment {
         detailsView = (ListView)getView().findViewById(R.id.details);
         sitetextView = (TextView)getView().findViewById(R.id.sitetextView);
         statustextView = (TextView)getView().findViewById(R.id.statustextView);
-        pm25textView = (TextView)getView().findViewById(R.id.pm25textView);
 
         sitetextView.setText(data.getSiteName());
-        statustextView.setText("空氣品質 : "+data.getStatus());
-        pm25textView.setText("PM2.5 : "+data.getPM2_5());
+        statustextView.setText(data.getStatus());
+
 
 
         List<String> result = data.getDetails();

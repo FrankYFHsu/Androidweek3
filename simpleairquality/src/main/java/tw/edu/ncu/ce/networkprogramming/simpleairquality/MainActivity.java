@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity implements AQXListFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements AQXListFragment.OnFragmentInteractionListener, AQXApp.AQXResponseCallback {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -32,26 +32,12 @@ public class MainActivity extends ActionBarActivity implements AQXListFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!isInTwoPaneMode()) {
-
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-                return;
-            }
-            Log.d(TAG,"in single mode");
-            // Create a new Fragment to be placed in the activity layout
-            AQXListFragment firstFragment = new AQXListFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
-
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
+        if (savedInstanceState != null) {
+            return;
         }
+
+        AQXApp.getInstance(this).requestNewAQXData(this);
+
 
 
     }
@@ -94,14 +80,14 @@ public class MainActivity extends ActionBarActivity implements AQXListFragment.O
         if (articleFrag != null) {
             // If article frag is available, we're in two-pane layout…
             // Call a method in the ArticleFragment to update its content
-            articleFrag.updateArticleView(position,data);
+            articleFrag.updateArticleView(position, data);
         } else {
             // Otherwise, we're in the one-pane layout and must swap frags…
             // Create fragment and give it an argument for the selected article
             DetailOfSiteFragment newFragment = new DetailOfSiteFragment();
             Bundle args = new Bundle();
             args.putInt(DetailOfSiteFragment.ARG_POSITION, position);
-            args.putString(DetailOfSiteFragment.ARG_JSON,new Gson().toJson(data));
+            args.putString(DetailOfSiteFragment.ARG_JSON, new Gson().toJson(data));
             newFragment.setArguments(args);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -114,5 +100,37 @@ public class MainActivity extends ActionBarActivity implements AQXListFragment.O
             // Commit the transaction
             transaction.commit();
         }
+    }
+
+    @Override
+    public void onSuccess(List<AQXData> result) {
+        if (!isInTwoPaneMode()) {
+
+
+            Log.d(TAG, "in single mode");
+            // Create a new Fragment to be placed in the activity layout
+            AQXListFragment firstFragment = new AQXListFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }else{
+            AQXListFragment firstFragment = (AQXListFragment) getSupportFragmentManager().findFragmentById(R.id.recipient_fragment);
+            firstFragment.updateList();
+        }
+
+
+    }
+
+    @Override
+    public void onFailure(String responseMessage) {
+
+        Toast.makeText(this, "ResponseMessage", Toast.LENGTH_LONG).show();
+
+
     }
 }

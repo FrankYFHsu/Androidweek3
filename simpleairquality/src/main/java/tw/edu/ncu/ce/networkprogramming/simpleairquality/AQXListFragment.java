@@ -45,11 +45,26 @@ public class AQXListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG,"do HttpGetTaskWithGson");
-        new HttpGetTaskWithGson().execute(jsonAPI);
+       //Log.d(TAG, "do HttpGetTaskWithGson");
+        //new HttpGetTaskWithGson().execute(jsonAPI);
+        mListView = (ListView) getView().findViewById(R.id.listView);
+        mAdapter = new AQXDataAdapter(getActivity(), AQXApp.getInstance(getActivity()).getAQXData());
+        mListView.setAdapter(mAdapter);
+
+
+        mListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                onDataItemClick(position, mAdapter.getItem(position));
+                mListView.setItemChecked(position, true);
+
+            }
+
+        });
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +76,7 @@ public class AQXListFragment extends Fragment {
 
     public void onDataItemClick(int position, AQXData data) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(position,data);
+            mListener.onFragmentInteraction(position, data);
         }
     }
 
@@ -92,6 +107,10 @@ public class AQXListFragment extends Fragment {
             mListView = (ListView) getView().findViewById(R.id.listView);
             mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
+    }
+
+    public void updateList(){
+        mAdapter.updateAQXData(AQXApp.getInstance(getActivity()).getAQXData());
     }
 
     private boolean isInTwoPaneMode() {
@@ -172,7 +191,9 @@ public class AQXListFragment extends Fragment {
                 Toast.makeText(getActivity(), "Service Unavailable", Toast.LENGTH_LONG).show();
 
             }
-
+            if (getView() == null) {
+                return;
+            }
             mListView = (ListView) getView().findViewById(R.id.listView);
             mAdapter = new AQXDataAdapter(getActivity(), result);
             mListView.setAdapter(mAdapter);
@@ -183,7 +204,7 @@ public class AQXListFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    onDataItemClick(position,mAdapter.getItem(position));
+                    onDataItemClick(position, mAdapter.getItem(position));
                     mListView.setItemChecked(position, true);
 
                 }
