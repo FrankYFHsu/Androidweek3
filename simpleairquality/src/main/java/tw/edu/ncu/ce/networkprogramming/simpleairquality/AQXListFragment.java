@@ -89,6 +89,7 @@ public class AQXListFragment extends Fragment {
         // When in two-pane layout, set the listview to highlight the selected list item
         // (We do this during onStart because at the point the listview is available.)
         if (isInTwoPaneMode()) {
+            mListView = (ListView) getView().findViewById(R.id.listView);
             mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
     }
@@ -110,8 +111,8 @@ public class AQXListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(int position, AQXData data);
+
+        void onFragmentInteraction(int position, AQXData data);
     }
 
     private class HttpGetTaskWithGson extends AsyncTask<String, Integer, List<AQXData>> {
