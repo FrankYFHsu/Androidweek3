@@ -15,8 +15,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="24dp"
+        android:id="@+id/fabButton"
         android:src="@drawable/ic_action_action_autorenew"
         app:layout_anchor="@id/listView"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+        android:onClick="refresh"
+        android:visibility="invisible"/>
 
 </android.support.design.widget.CoordinatorLayout>

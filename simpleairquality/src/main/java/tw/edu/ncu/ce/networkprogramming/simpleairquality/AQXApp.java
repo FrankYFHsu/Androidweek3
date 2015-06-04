@@ -58,6 +58,13 @@ public class AQXApp {
 
     }
 
+    public boolean hasAQXData(){
+        if(mAqxData.size()>0){
+            return true;
+        }
+        return false;
+    }
+
 
     private class GetAQXTask extends AsyncTask<String, Integer, List<AQXData>> {
 

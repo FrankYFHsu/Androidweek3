@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements AQXListFragment.OnFragmentInteractionListener, AQXApp.AQXResponseCallback {
 
     private static final String TAG = MainActivity.class.getName();
+    private static final String AQXListFragment_TAG = AQXListFragment.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +80,32 @@ public class MainActivity extends ActionBarActivity implements AQXListFragment.O
         }
     }
 
+    public void refresh(View view){
+        AQXApp.getInstance(this).asyncRequestNewAQXData(this);
+    }
+
     @Override
     public void onSuccess(List<AQXData> result) {
 
         if (isInTwoPaneMode()) {
 
             AQXListFragment firstFragment = (AQXListFragment) getSupportFragmentManager().findFragmentById(R.id.aqxlist_fragment);
-            firstFragment.updateList();
+            firstFragment.updateAQXDataAdapter();
         } else {
 
-            AQXListFragment firstFragment = new AQXListFragment();
-            firstFragment.setArguments(getIntent().getExtras());
+            AQXListFragment firstFragment = (AQXListFragment)getSupportFragmentManager().findFragmentByTag(AQXListFragment_TAG);
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
+            if(firstFragment==null){
+                firstFragment = new AQXListFragment();
+                firstFragment.setArguments(getIntent().getExtras());
+
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, firstFragment,AQXListFragment_TAG).commit();
+            }else{
+                firstFragment.updateAQXDataAdapter();
+            }
+
+
         }
 
 

@@ -2,6 +2,7 @@ package tw.edu.ncu.ce.networkprogramming.simpleairquality;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.List;
 
-public class AQXListFragment extends Fragment {
+
+public class AQXListFragment extends Fragment{
     private static final String TAG = AQXListFragment.class.getName();
     private OnFragmentInteractionListener mListener;
     private ListView mListView;
+    private FloatingActionButton mFabButton;
     private AQXDataAdapter mAdapter;
 
     public AQXListFragment() {
@@ -29,6 +33,11 @@ public class AQXListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mFabButton = (FloatingActionButton)getView().findViewById(R.id.fabButton);
+        if(AQXApp.getInstance(getActivity()).hasAQXData()){
+            mFabButton.setVisibility(View.VISIBLE);
+        }
 
         mListView = (ListView) getView().findViewById(R.id.listView);
         mAdapter = new AQXDataAdapter(getActivity(), AQXApp.getInstance(getActivity()).getAQXData());
@@ -92,15 +101,21 @@ public class AQXListFragment extends Fragment {
         }
     }
 
-    public void updateList(){
+
+
+    public void updateAQXDataAdapter() {
+
+        mFabButton.setVisibility(View.VISIBLE);
         mAdapter.updateAQXData(AQXApp.getInstance(getActivity()).getAQXData());
     }
 
     private boolean isInTwoPaneMode() {
 
-        return getFragmentManager().findFragmentById(R.id.article_fragment) != null;
+        return getFragmentManager().findFragmentById(R.id.details_fragment) != null;
 
     }
+
+
 
 
     public interface OnFragmentInteractionListener {
