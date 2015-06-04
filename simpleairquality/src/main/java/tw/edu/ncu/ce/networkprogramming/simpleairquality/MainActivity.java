@@ -114,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements AQXListFragment.O
     @Override
     public void onFailure(String responseMessage) {
 
-        Toast.makeText(this, "ResponseMessage", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show();
 
 
     }
