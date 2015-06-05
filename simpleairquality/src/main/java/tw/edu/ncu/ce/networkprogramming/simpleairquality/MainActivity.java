@@ -3,6 +3,7 @@ package tw.edu.ncu.ce.networkprogramming.simpleairquality;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,10 @@ public class MainActivity extends ActionBarActivity implements AQXListFragment.O
         }
 
         AQXApp.getInstance(this).asyncRequestNewAQXData(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        setSupportActionBar(toolbar);
+
 
 
     }

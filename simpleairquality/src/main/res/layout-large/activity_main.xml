@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <fragment android:name="tw.edu.ncu.ce.networkprogramming.simpleairquality.AQXListFragment"
-        android:id="@+id/aqxlist_fragment"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_awesome_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/AppTheme.LightText" />
 
-    <fragment android:name="tw.edu.ncu.ce.networkprogramming.simpleairquality.DetailOfSiteFragment"
-        android:id="@+id/details_fragment"
-        android:layout_weight="2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <fragment
+            android:id="@+id/aqxlist_fragment"
+            android:name="tw.edu.ncu.ce.networkprogramming.simpleairquality.AQXListFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1" />
+
+        <fragment
+            android:id="@+id/details_fragment"
+            android:name="tw.edu.ncu.ce.networkprogramming.simpleairquality.DetailOfSiteFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="2" />
+    </LinearLayout>
 </LinearLayout>
