@@ -77,7 +77,7 @@ public class HttpSocketActivity extends ActionBarActivity {
             String host = "opendata.epa.gov.tw";
 
             int port = 80;
-            String command = "GET /ws/Data/AQX/?$format=json";
+            String command = "GET /ws/Data/AQX/?$format=json HTTP/1.1";
 
             try {
 
@@ -92,7 +92,7 @@ public class HttpSocketActivity extends ActionBarActivity {
                 pw.printf("Connection: close\r\n\r\n");
                 StringBuffer sb = new StringBuffer();
                 while (sc.hasNextLine()) {
-                    sb.append(sc.nextLine());
+                    sb.append(sc.nextLine()+"\n");
                 }
 
                 return sb.toString();
