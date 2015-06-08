@@ -129,11 +129,11 @@ public class HttpJSONActivity extends ActionBarActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                         result.add("地點" + ":"
-                                + jsonObject.get(SITENAMETAG) + ","
+                                + jsonObject.getString(SITENAMETAG) + ","
                                 + "空氣品質" + ":"
                                 + jsonObject.getString(STATUSTAG) + ","
                                 + "PM2.5" + ":"
-                                + jsonObject.get(PM25TAG));
+                                + jsonObject.getString(PM25TAG));
                     }
 
 
